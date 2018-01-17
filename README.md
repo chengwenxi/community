@@ -1,9 +1,12 @@
 # community
 
-<p>install</P>
-<p>cd $GOPATH/src/github.com</P>
-<p>git pull https://github.com/chengwenxi/community.git</P>
+#install
 
-<p>glide install</P>
-<p>go run app.go</p>
+```
+cd $GOPATH/src/github.com
+git pull https://github.com/chengwenxi/community.git
 
+glide install
+cd community
+go run app.go
+```

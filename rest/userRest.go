@@ -5,15 +5,14 @@ import (
 	"github.com/community/models"
 	"strconv"
 	"net/http"
-	"log"
 )
 
-func RegisterAll(g *gin.RouterGroup) {
+func UserRegisterAll(g *gin.RouterGroup) {
 	g.GET("", List)
 	g.GET("/:id", Find)
 	g.POST("", Create)
 	g.PUT("", Update)
-	g.DELETE("", Delete)
+	g.DELETE("/:id", Delete)
 }
 
 func List(c *gin.Context) {
@@ -47,17 +46,36 @@ func Create(c *gin.Context) {
 		} else {
 			c.JSON(http.StatusBadRequest, gin.H{"error": dbErr.Error()})
 		}
-
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
-
 }
 
 func Delete(c *gin.Context) {
-
+	id, _ := strconv.Atoi(c.Param("id"))
+	user := &models.User{
+		Id: id,
+	}
+	if err := user.Delete(); err == nil {
+		c.JSON(http.StatusOK, user)
+	} else {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	}
 }
 
 func Update(c *gin.Context) {
-
+	var user models.User
+	if err := c.ShouldBindJSON(&user); err == nil {
+		if len(user.Email) == 0 {
+			c.JSON(http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
+			return
+		}
+		if dbErr := user.Update(); dbErr == nil {
+			c.JSON(http.StatusOK, user)
+		} else {
+			c.JSON(http.StatusBadRequest, gin.H{"error": dbErr.Error()})
+		}
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
 }

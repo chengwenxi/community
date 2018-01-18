@@ -25,6 +25,10 @@ func (user *User) First() error {
 	return DB.First(user).Error
 }
 
+func (user *User) Update() error {
+	return DB.Save(user).Error
+}
+
 func UserList(skip int, limit int) ([]User, error) {
 	var users []User
 	err := DB.Limit(limit).Offset(skip).Find(&users).Error

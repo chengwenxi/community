@@ -9,7 +9,9 @@ func InitDB()  {
 	if err != nil {
 		print(err)
 	}
-	db.SingularTable(true)
+
+	//use singular table by default，else table name will add 's'
+	//db.SingularTable(true)
 
 	//连接池上限
 	db.DB().SetMaxIdleConns(100)

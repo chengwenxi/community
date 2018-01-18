@@ -4,43 +4,54 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/community/models"
 	"strconv"
+	"net/http"
+	"log"
 )
 
 func RegisterAll(g *gin.RouterGroup) {
 	g.GET("", List)
+	g.GET("/:id", Find)
 	g.POST("", Create)
 	g.PUT("", Update)
 	g.DELETE("", Delete)
 }
 
 func List(c *gin.Context) {
-	skip, err := strconv.Atoi(c.Query("skip"))
-	limit, err := strconv.Atoi(c.Query("limit"))
-	user, err := models.UserList(skip, limit)
+	skip, err := strconv.Atoi(c.DefaultQuery("skip", "0"))
+	limit, err := strconv.Atoi(c.DefaultQuery("limit", "20"))
+	users, err := models.UserList(skip, limit)
 	if err != nil {
 
 	}
-	c.JSON(200, user)
+	c.JSON(200, users)
 }
 
 func Find(c *gin.Context) {
-
+	id, _ := strconv.Atoi(c.Param("id"))
+	user := &models.User{
+		Id: id,
+	}
+	user.First()
+	c.JSON(http.StatusOK, user)
 }
 
 func Create(c *gin.Context) {
-	email := c.PostForm("email")
-	telephone := c.PostForm("telephone")
-	user := &models.User{
-		Email:     email,
-		Telephone: telephone,
+	var user models.User
+	if err := c.ShouldBindJSON(&user); err == nil {
+		if len(user.Email) == 0 {
+			c.JSON(http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
+			return
+		}
+		if dbErr := user.Create(); dbErr == nil {
+			c.JSON(http.StatusOK, user)
+		} else {
+			c.JSON(http.StatusBadRequest, gin.H{"error": dbErr.Error()})
+		}
+
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
-	if len(user.Email) == 0 || len(user.Email) == 0 {
-		c.JSON(400, gin.H{
-			"message": "invalid parameter",
-		})
-		return
-	}
-	c.JSON(200, user.Create())
+
 }
 
 func Delete(c *gin.Context) {

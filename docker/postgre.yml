@@ -3,7 +3,7 @@ services:
     beandrgs-postgresql:
         image: postgres:9.6.2
 #        volumes:
-#            - ~/volumes/BeanDRGs/postgresql/:/var/lib/postgresql/
+#            - ~/volumes/community/postgresql/:/var/lib/postgresql/
         environment:
             - POSTGRES_USER=com
             - POSTGRES_PASSWORD=com

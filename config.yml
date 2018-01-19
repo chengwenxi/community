@@ -6,3 +6,8 @@ postgres:
   password: com
   sslmode: disable
 server: 0.0.0.0:80
+mail:
+  host: smtp.163.com
+  port: 25
+  username: XXX@163.com
+  password: XXX

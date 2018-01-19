@@ -11,3 +11,4 @@ mail:
   port: 25
   username: XXX@163.com
   password: XXX
+staticPath: D:\test\static  #静态文件路径

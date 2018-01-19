@@ -22,7 +22,7 @@ func List(c *gin.Context) {
 	if err != nil {
 
 	}
-	c.JSON(200, users)
+	c.JSON(http.StatusOK, users)
 }
 
 func Find(c *gin.Context) {

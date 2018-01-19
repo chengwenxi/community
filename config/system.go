@@ -7,9 +7,10 @@ import (
 )
 
 type Configuration struct {
-	Postgres *Postgres `yaml:"postgres"`
-	Server   string    `yaml:"server"`
-	Mail     *Mail     `yaml:"mail"`
+	Postgres   *Postgres `yaml:"postgres"`
+	Server     string    `yaml:"server"`
+	Mail       *Mail     `yaml:"mail"`
+	StaticPath string    `yaml:"staticPath"`
 }
 
 type Postgres struct {

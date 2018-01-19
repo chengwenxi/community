@@ -1,0 +1,8 @@
+postgres:
+  host: 127.0.0.1
+  post: 5432
+  dbname: com
+  user: com
+  password: com
+  sslmode: disable
+server: 0.0.0.0:80

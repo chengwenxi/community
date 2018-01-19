@@ -1,9 +1,11 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
-type User struct {
-	Id         int
+type Users struct {
+	Id         uint `gorm:"primary_key"`
 	Email      string
 	Salt       string
 	Password   string
@@ -13,24 +15,24 @@ type User struct {
 	Updatetime time.Time
 }
 
-func (user *User) Create() error {
+func (user *Users) Create() error {
 	return DB.Create(user).Error
 }
 
-func (user *User) Delete() error {
+func (user *Users) Delete() error {
 	return DB.Delete(user).Error
 }
 
-func (user *User) First() error {
+func (user *Users) First() error {
 	return DB.First(user).Error
 }
 
-func (user *User) Update() error {
+func (user *Users) Update() error {
 	return DB.Save(user).Error
 }
 
-func UserList(skip int, limit int) ([]User, error) {
-	var users []User
+func UserList(skip int, limit int) ([]Users, error) {
+	var users []Users
 	err := DB.Limit(limit).Offset(skip).Find(&users).Error
 	return users, err
 }

@@ -26,16 +26,16 @@ func List(c *gin.Context) {
 }
 
 func Find(c *gin.Context) {
-	id, _ := strconv.Atoi(c.Param("id"))
-	user := &models.User{
-		Id: id,
+	id, _ := strconv.ParseUint(c.Param("id"),10,64)
+	user := &models.Users{
+		Id: uint(id),
 	}
 	user.First()
 	c.JSON(http.StatusOK, user)
 }
 
 func Create(c *gin.Context) {
-	var user models.User
+	var user models.Users
 	if err := c.ShouldBindJSON(&user); err == nil {
 		if len(user.Email) == 0 {
 			c.JSON(http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
@@ -52,9 +52,9 @@ func Create(c *gin.Context) {
 }
 
 func Delete(c *gin.Context) {
-	id, _ := strconv.Atoi(c.Param("id"))
-	user := &models.User{
-		Id: id,
+	id, _ := strconv.ParseUint(c.Param("id"),10,64)
+	user := &models.Users{
+		Id: uint(id),
 	}
 	if err := user.Delete(); err == nil {
 		c.JSON(http.StatusOK, user)
@@ -64,7 +64,7 @@ func Delete(c *gin.Context) {
 }
 
 func Update(c *gin.Context) {
-	var user models.User
+	var user models.Users
 	if err := c.ShouldBindJSON(&user); err == nil {
 		if len(user.Email) == 0 {
 			c.JSON(http.StatusBadRequest, http.StatusText(http.StatusBadRequest))

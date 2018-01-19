@@ -8,9 +8,13 @@ import (
 	"io"
 	"os"
 	"log"
+	"github.com/community/config"
 )
 
 func main() {
+
+	//init config
+	config.LoadConfiguration("./config.yml")
 
 	//log
 	r := gin.New()
@@ -26,7 +30,7 @@ func main() {
 	rest.UserRegisterAll(r.Group("/user"))//user
 
 
-	r.Run() // listen and serve on 0.0.0.0:8080
+	r.Run(config.Config.Server) // listen and serve on 0.0.0.0:8080
 	log.Println("server start")
 }
 

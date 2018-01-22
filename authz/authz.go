@@ -16,7 +16,7 @@ func NewAuthorizer(e *casbin.Enforcer) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		a := &BasicAuthorizer{enforcer: e}
 		if !a.CheckPermission(c.Request) {
-			c.Abort() //stop the current handler and not next
+			c.Abort() //stop the current handler and not execute next
 			a.RequirePermission(c.Writer)
 			return
 		}

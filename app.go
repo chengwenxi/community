@@ -9,6 +9,8 @@ import (
 	"os"
 	"log"
 	"github.com/community/config"
+	"github.com/casbin/casbin"
+	"github.com/community/authz"
 )
 
 func main() {
@@ -25,8 +27,13 @@ func main() {
 	log.SetOutput(gin.DefaultWriter) // You may need this
 
 	//authorizer
-	//e := casbin.NewEnforcer("authz_model.conf", "authz_policy.csv")
-	//r.Use(authz.NewAuthorizer(e))
+	e := casbin.NewEnforcer("./authz/authz_model.conf", "./authz/authz_policy.csv")
+	r.Use(authz.NewAuthorizer(e))
+
+	//init user and role by db
+	e.AddRoleForUser("test","admin")
+	e.AddRoleForUser("test2","user")
+	e.DeleteRoleForUser("test2","user")
 
 	//static source
 	r.Static("/static", config.Config.StaticPath)
@@ -36,6 +43,7 @@ func main() {
 
 	//rest
 	rest.UserRegisterAll(r.Group("/user")) //user
+	rest.AuthRegisterAll(r.Group("/auth")) //auth
 
 	r.Run(config.Config.Server) // listen and serve on 0.0.0.0:8080
 	log.Println("server start")

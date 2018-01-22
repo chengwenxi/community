@@ -31,6 +31,12 @@ func (user *Users) Update() error {
 	return DB.Save(user).Error
 }
 
+func AuthUser(email string, password string) (Users, error) {
+	var users Users
+	err := DB.Where("email = ? AND password = ?", email, password).Find(&users).Error
+	return users, err
+}
+
 func UserList(skip int, limit int) ([]Users, error) {
 	var users []Users
 	err := DB.Limit(limit).Offset(skip).Find(&users).Error

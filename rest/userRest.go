@@ -8,14 +8,14 @@ import (
 )
 
 func UserRegisterAll(g *gin.RouterGroup) {
-	g.GET("", List)
-	g.GET("/:id", Find)
-	g.POST("", Create)
-	g.PUT("", Update)
-	g.DELETE("/:id", Delete)
+	g.GET("", ListUser)
+	g.GET("/:id", FindUser)
+	g.POST("", CreateUser)
+	g.PUT("", UpdateUser)
+	g.DELETE("/:id", DeleteUser)
 }
 
-func List(c *gin.Context) {
+func ListUser(c *gin.Context) {
 	skip, err := strconv.Atoi(c.DefaultQuery("skip", "0"))
 	limit, err := strconv.Atoi(c.DefaultQuery("limit", "20"))
 	users, err := models.UserList(skip, limit)
@@ -25,8 +25,8 @@ func List(c *gin.Context) {
 	c.JSON(http.StatusOK, users)
 }
 
-func Find(c *gin.Context) {
-	id, _ := strconv.ParseUint(c.Param("id"),10,64)
+func FindUser(c *gin.Context) {
+	id, _ := strconv.ParseUint(c.Param("id"), 10, 64)
 	user := &models.Users{
 		Id: uint(id),
 	}
@@ -34,7 +34,7 @@ func Find(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
-func Create(c *gin.Context) {
+func CreateUser(c *gin.Context) {
 	var user models.Users
 	if err := c.ShouldBindJSON(&user); err == nil {
 		if len(user.Email) == 0 {
@@ -51,8 +51,8 @@ func Create(c *gin.Context) {
 	}
 }
 
-func Delete(c *gin.Context) {
-	id, _ := strconv.ParseUint(c.Param("id"),10,64)
+func DeleteUser(c *gin.Context) {
+	id, _ := strconv.ParseUint(c.Param("id"), 10, 64)
 	user := &models.Users{
 		Id: uint(id),
 	}
@@ -63,7 +63,7 @@ func Delete(c *gin.Context) {
 	}
 }
 
-func Update(c *gin.Context) {
+func UpdateUser(c *gin.Context) {
 	var user models.Users
 	if err := c.ShouldBindJSON(&user); err == nil {
 		if len(user.Email) == 0 {
